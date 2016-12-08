@@ -39,15 +39,11 @@ file_exists(){
 # The function takes filename as it's parameter
 rename_file(){
   # Get the contents of the filename
-  FILE_NAME=`echo $1`
-
-  NAME=`echo $FILE_NAME | cut -d "_" -f 1`
-  MAJOR=`echo $FILE_NAME | cut -d "_" -f 2`
-
-  MINOR_EXT=`echo $FILE_NAME | cut -d "_" -f 3`
-
-  MINOR=`echo $MINOR_EXT | cut -d "." -f 1`
-  EXT=`echo $MINOR_EXT | cut -d "." -f 2`
+  FILE_CONTENTS=`egrep -o "([A-Za-z]+){1}" <<< $1`
+  NAME=`echo $FILE_CONTENTS | cut -d " " -f 1`
+  MAJOR=`echo $FILE_CONTENTS | cut -d " " -f 2`
+  MINOR=`echo $FILE_CONTENTS | cut -d " " -f 3`
+  EXT=`echo $FILE_CONTENTS | cut -d " " -f 4`
 
   NEW_FILENAME="$NAME.$MAJOR.$MINOR.$EXT"
 
@@ -62,7 +58,7 @@ rename_file(){
 
 # Function to check if the string provided matches the old scheme of filename
 is_old_scheme(){
-  if egrep '^([-A-Za-z0-9]+_)[0-9]+_[0-9]+\.[A-Za-z]{1,}$' <<< $1 2> /dev/null 1> /dev/null
+  if egrep '^([A-Za-z]+_){2}[A-Za-z]+\.[A-Za-z]{1,}$' <<< $1 2> /dev/null 1> /dev/null
   then
     return 0
   else
