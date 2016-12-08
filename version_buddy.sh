@@ -16,6 +16,7 @@
 #   1 - Invalid Arguments
 #   2 - File does not exist
 #   3 - File not well-formed
+#   4 - Destination file already exists
 
 # Usage function
 usage(){
@@ -37,16 +38,22 @@ file_exists(){
 # Function that renames the file from old scheme to new scheme
 # The function takes filename as it's parameter
 rename_file(){
-  echo "IN RENAME"
   # Get the contents of the filename
-  FILE_CONTENTS=`egrep -o "([A-Za-z]+){1}" <<< "Name_Major_Minor.sh"`
-  NAME=`$FILE_CONTENTS | cut -d " " -f 1`
-  MAJOR=`$FILE_CONTENTS | cut -d " " -f 2`
-  MINOR=`$FILE_CONTENTS | cut -d " " -f 3`
-  EXT=`$FILE_CONTENTS | cut -d " " -f 4`
+  FILE_CONTENTS=`egrep -o "([A-Za-z]+){1}" <<< $1`
+  NAME=`echo $FILE_CONTENTS | cut -d " " -f 1`
+  MAJOR=`echo $FILE_CONTENTS | cut -d " " -f 2`
+  MINOR=`echo $FILE_CONTENTS | cut -d " " -f 3`
+  EXT=`echo $FILE_CONTENTS | cut -d " " -f 4`
 
-  NEW_FILENAME=$NAME "." $MAJOR "." $MINOR "." $EXT
-  echo $NEW_FILENAME
+  NEW_FILENAME="$NAME.$MAJOR.$MINOR.$EXT"
+
+  if [ -f $NEW_FILENAME ]
+  then
+    echo "ERROR: The destination file $NEW_FILENAME already exists"
+  else
+    mv $1 $NEW_FILENAME
+    echo "Filename successfully changed"
+  fi
 }
 
 # Function to check if the string provided matches the old scheme of filename
