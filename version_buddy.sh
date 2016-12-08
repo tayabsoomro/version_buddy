@@ -50,10 +50,13 @@ rename_file(){
 
 # Function to check if the string provided matches the old scheme of filename
 is_old_scheme(){
+  echo $1
   if egrep '^([A-Za-z]+_){2}[A-Za-z]+\.[A-Za-z]{1,}$' <<< $1 2> /dev/null 1> /dev/null
   then
+    echo $1
     return 1
   else
+    echo $1
     return 0
   fi
 }
@@ -62,10 +65,10 @@ is_old_scheme(){
 # The function takes the filename as it's parameter
 convert_filename_scheme(){
   # Checks to see if the filename provided is old scheme
-  if [ is_old_scheme $1 -eq 1 ]
+  if is_old_scheme $1
   then
     echo "is_old_scheme"
-    if [ file_exists $1 ]
+    if file_exists $1
     then
       echo "file_exists"
       rename_file $1
