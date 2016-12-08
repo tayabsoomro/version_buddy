@@ -1,0 +1,15 @@
+# Muhammad Tayab Soomro
+# 11199539
+# mts066
+# CMPT 214 - External Documentation for version_buddy.sh
+
+
+# Program: version_buddy
+
+# Introduction
+
+version_buddy is a script that renames files in the old format
+(Name_Major_Minor.Ext) to the new format (Name.Major.Minor.Ext). The script takes
+one argument on the command line, the name of an existing file in the old format.
+The script performs a number of checks, and if they succeed, it renames to file
+to the corresponding name in the new format.
