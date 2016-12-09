@@ -21,6 +21,8 @@
 # Usage function
 usage(){
   echo $0 " <filename>"
+  echo "where <filename> is of the form Name_Major_Minor.Extension and does not
+  contain any whitespace"
   exit $1
 }
 

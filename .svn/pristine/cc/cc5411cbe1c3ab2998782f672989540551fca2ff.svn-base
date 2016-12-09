@@ -1,0 +1,101 @@
+#!/bin/sh
+
+# Muhammad Tayab Soomro
+# 11199539
+# mts066
+# CMPT 214 - Shell script for converting file names with old format to the new one.
+
+# Old Format
+#       Name_Major_Minor.Ext
+# New Format
+#       Name.Major.Minor.Ext
+
+
+# Program Exit Error Codes
+#   0 - Exit Successful
+#   1 - Invalid Arguments
+#   2 - File does not exist
+#   3 - File not well-formed
+#   4 - Destination file already exists
+
+# Usage function
+usage(){
+  echo $0 " <filename>"
+  echo "where <filename> is of the form Name_Major_Minor.Extension and does not
+  contain any whitespace"
+  exit $1
+}
+
+# Boolean Function to check if the filename provided exists.
+# The function takes filename as it's parameter
+file_exists(){
+    if [ -f $1 ]
+    then
+      return 0
+    else
+      return 1
+    fi
+}
+
+# Function that renames the file from old scheme to new scheme
+# The function takes filename as it's parameter
+rename_file(){
+  # Get the contents of the filename
+  FILE_NAME=`echo $1`
+
+  NAME=`echo $FILE_NAME | cut -d "_" -f 1`
+  MAJOR=`echo $FILE_NAME | cut -d "_" -f 2`
+
+  MINOR_EXT=`echo $FILE_NAME | cut -d "_" -f 3`
+
+  MINOR=`echo $MINOR_EXT | cut -d "." -f 1`
+  EXT=`echo $MINOR_EXT | cut -d "." -f 2`
+
+  NEW_FILENAME="$NAME.$MAJOR.$MINOR.$EXT"
+
+  if [ -f $NEW_FILENAME ]
+  then
+    echo "ERROR: The destination file $NEW_FILENAME already exists"
+  else
+    mv $1 $NEW_FILENAME
+    echo "Filename successfully changed"
+  fi
+}
+
+# Function to check if the string provided matches the old scheme of filename
+is_old_scheme(){
+  if egrep '^([-A-Za-z0-9]+_)[0-9]+_[0-9]+\.[A-Za-z]{1,}$' <<< $1 2> /dev/null 1> /dev/null
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+# The function that converts filenames from old scheme to new one after all the
+# necessary checks
+# The function takes the filename as it's parameter
+convert_filename_scheme(){
+  # Checks to see if the filename provided is old scheme
+  if is_old_scheme $1
+  then
+    if file_exists $1
+    then
+      rename_file $1
+    else
+      echo "ERROR: file does not exist"
+      exit 2
+    fi
+  else
+    echo "ERROR: filename not well-formed"
+    exit 3
+  fi
+}
+
+
+# There should only be at most one argument
+if [ $# -ne 1 ]
+then
+  usage 1
+else
+  convert_filename_scheme $1
+fi
