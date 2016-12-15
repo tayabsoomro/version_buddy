@@ -1,1 +1,43 @@
 # version_buddy
+
+## CMPT 214 - External Documentation for version_buddy.sh
+
+
+# Program: version_buddy
+
+# Introduction
+
+version_buddy is a script that renames files in the old format
+(Name_Major_Minor.Ext) to the new format (Name.Major.Minor.Ext). The script takes
+one argument on the command line, the name of an existing file in the old format.
+The script performs a number of checks, and if they succeed, it renames to file
+to the corresponding name in the new format.
+
+# Program Exit Error Codes
+0 - Exit Successful
+1 - Invalid Arguments
+2 - File does not exist
+3 - File not well-formed
+4 - Destination file already exists
+
+# Program Outline
+
+The program only takes on parameter and that is the name of the file that needs
+to be converted from the old format scheme to the new one. The program does few
+checks and then if successful, it changes the file name to the new naming scheme.
+The first check that it does is that whether or not the filename provided follows
+the old scheme, if it does, then it does another check for whether or not the file
+actually exists, if it does then it renames the file, and in any other case, it
+throws an error and exits the program with appropriate exist status.
+
+
+# Program Structure
+
+The program mainly consists of multiple functions and they're called to do the
+operations. For example, first of all, the program checks to see if the number
+or arguments provided is not 1, if so, then it calls the usage function which
+explains the syntax of how the program is to be used. Otherwise, the program calls
+the function convert_filename_scheme which does all the checks and if the checks
+are successful, then it renames the file. There are functions for checks such as
+is_old_scheme (returns 1 if true, 0 otherwise) and file_exists (returns 1 if
+true, 0 otherwise)
